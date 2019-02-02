@@ -6,11 +6,6 @@ APP_HOME: "/home/{{APP_USER}}"
 TOMCAT_LOC: "{{APP_HOME}}/apache-tomcat-{{TOMCAT_VERSION}}"
 WEBAPP_URL: "https://github.com/citb34/project-1-documentation/raw/master/studentapp.war"
 
-RDS_USERNAME: sample 
-RDS_PASSWORD: sample123
-RDS_ENDPOINT: mydb.rds.aws.com
-RDS_DBNAME: studentapp
-
 TOMCAT_INIT_URL: https://raw.githubusercontent.com/citb34/project-1-documentation/master/tomcat-init
 API_INIT_URL: https://raw.githubusercontent.com/citb34/project-1-documentation/master/studentapi-init
 
