@@ -1,0 +1,4 @@
+- name: Demo for ansible-pull
+  hosts: localhost
+  tasks:
+    - debug: msg="Hello"
