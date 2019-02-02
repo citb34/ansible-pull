@@ -1,0 +1,5 @@
+- name: Setup Web and Application Server for Student Application
+  hosts: localhost
+  become: yes
+  roles:
+    - stack

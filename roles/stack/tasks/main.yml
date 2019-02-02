@@ -1,0 +1,114 @@
+- name: Install Web Server 
+  package:
+    name: httpd
+    state: present
+
+- name: Copy proxy config file
+  copy:
+    src: studentapp.conf
+    dest: /etc/httpd/conf.d/studentapp.conf
+
+- name: Copy index.html file
+  copy:
+    src: index.html
+    dest: /var/www/html/index.html
+
+- name: Restart service httpd
+  service:
+    name: httpd
+    state: restarted
+
+- name: Install Java
+  package:
+    name: java
+    state: present
+
+- name: Add application user
+  user:
+    name: "{{APP_USER}}"
+
+- name: Download and extract tomcat
+  unarchive:
+    src: "{{TOMCAT_URL}}"
+    dest: "{{APP_HOME}}"
+    remote_src: yes
+  become_user: "{{APP_USER}}"
+
+- name: Find files in webapps 
+  find:
+    paths: "{{TOMCAT_LOC}}/webapps"
+    file_type: any
+  register: out
+  become_user: "{{APP_USER}}"
+
+- name: Delete all existing webapps 
+  file:
+    path: "{{item.path}}"
+    state: absent
+  loop: "{{out.files}}"
+
+- name: Download Student Web Application 
+  get_url:
+    url: "{{WEBAPP_URL}}"
+    dest: "{{TOMCAT_LOC}}/webapps/student.war"
+  become_user: "{{APP_USER}}"
+
+- name: Update context.xml file with DB details
+  template:
+    src: context.xml.j2
+    dest: "{{TOMCAT_LOC}}/conf/context.xml"
+  become_user: "{{APP_USER}}"
+
+- name: Download tomcat init script 
+  get_url:
+    url: "{{TOMCAT_INIT_URL}}"
+    dest: /etc/init.d/tomcat
+    mode: 0755
+
+- name: Update systemd 
+  shell: systemctl daemon-reload
+
+- name: Start tomcat
+  service:
+    name: tomcat
+    state: restarted
+
+- name: Create directory for api 
+  file:
+    path: "{{APP_HOME}}/api"
+    state: directory 
+  become_user: "{{APP_USER}}"
+
+- name: Find files in api  
+  find:
+    paths: "{{APP_HOME}}/api"
+    file_type: any
+  register: out
+  become_user: "{{APP_USER}}"
+
+- name: Delete all existing api files 
+  file:
+    path: "{{item.path}}"
+    state: absent
+  loop: "{{out.files}}"
+
+- name: Download API 
+  get_url:
+    url: "{{APIAPP_URL}}"
+    dest: "{{APP_HOME}}/api/studentapi.war"
+  become_user: "{{APP_USER}}"
+  
+- name: Download api init script 
+  get_url:
+    url: "{{API_INIT_URL}}"
+    dest: /etc/init.d/studentapi
+    mode: 0755
+
+- name: Update systemd 
+  shell: systemctl daemon-reload
+
+- name: Start Student API 
+  service:
+    name: studentapi
+    state: restarted
+  

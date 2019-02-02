@@ -1,0 +1,17 @@
+TOMCAT_VERSION: 8.5.37
+TOMCAT_MAJOR_VERSION: "{{ TOMCAT_VERSION.split('.')[0] }}"
+TOMCAT_URL: https://archive.apache.org/dist/tomcat/tomcat-{{TOMCAT_MAJOR_VERSION}}/v{{TOMCAT_VERSION}}/bin/apache-tomcat-{{TOMCAT_VERSION}}.tar.gz
+APP_USER: student
+APP_HOME: "/home/{{APP_USER}}"
+TOMCAT_LOC: "{{APP_HOME}}/apache-tomcat-{{TOMCAT_VERSION}}"
+WEBAPP_URL: "https://github.com/citb34/project-1-documentation/raw/master/studentapp.war"
+
+RDS_USERNAME: sample 
+RDS_PASSWORD: sample123
+RDS_ENDPOINT: mydb.rds.aws.com
+RDS_DBNAME: studentapp
+
+TOMCAT_INIT_URL: https://raw.githubusercontent.com/citb34/project-1-documentation/master/tomcat-init
+API_INIT_URL: https://raw.githubusercontent.com/citb34/project-1-documentation/master/studentapi-init
+
+APIAPP_URL: https://s3-us-west-2.amazonaws.com/studentapi-cit/studentapi.war
