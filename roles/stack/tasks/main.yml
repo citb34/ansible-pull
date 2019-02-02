@@ -104,6 +104,15 @@
     dest: /etc/init.d/studentapi
     mode: 0755
 
+- name: Update DB Parameters in bash_profile 
+  lineinfile:
+    path: "{{APP_HOME}}/.bash_profile"
+    line: |
+        export RDS_ENDPOINT={{RDS_ENDPOINT}}
+        export RDS_USER={{RDS_USERNAME}}
+        export RDS_PASS={{RDS_PASSWORD}}
+        export RDS_DBNAME={{RDS_DBNAME}}
+
 - name: Update systemd 
   shell: systemctl daemon-reload
 
